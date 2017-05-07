@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="indigo" />
+
+        <title>Noticias UBB</title>
+
+        <link rel="stylesheet" type="text/css" href="ui/css/jquery.mobile-1.4.5.min.css" />
+        <link rel="stylesheet" type="text/css" href="ui/css/material-ui/nativedroid2.css" />
+        <link rel="stylesheet" type="text/css" href="ui/css/waves.min.css" />
+        <link rel="stylesheet" type="text/css" href="ui/css/animate.css" />
+
+        <link rel="stylesheet" type="text/css" href="ui/css/material-ui/nativedroid2.color.light-green.css" />
+    </head>
+
+    <body class="clr-accent-orange">
+        <div data-role="page" id="allList">
+            <div data-role="header" data-position="fixed" class="wow slideInDown">
+                <h1 class="wow fadeIn" data-wow-delay='0.4s'>Noticias UBB</h1>
+                <a id="refresh" href="#" class="ui-btn ui-btn-right wow fadeIn" data-wow-delay="1.2s"><i class="zmdi zmdi-refresh"></i></a>
+                <a href="#leftpanel" class="ui-btn ui-btn-left wow fadeIn" data-wow-delay="0.8s"><i class="zmdi zmdi-menu"></i></a>
+            </div>
+
+            <div data-role="panel" id="leftpanel" data-display="overlay" data-position-fixed="true" >
+                <ul id="panelOptions" data-role="listview">
+                	<li id="set"><a href="#settings"><div class="ui-grid-a"><div class="ui-block-a" align="left"></div></div><div align="left">Ajustes</div></a></li>
+                    <li onclick="navigator.app.exitApp();" id="closer"><a href="#"><div class="ui-grid-a"><div class="ui-block-a" align="left"></div></div><div align="left">Cerrar</div></a></li>
+                </ul>
+            </div>
+
+            <div data-role="header" class="wow slideInDown" data-wow-delay="0.4s">
+                <ul data-role="nd2tabs" data-swipe="false">
+                    <li data-tab="allNews">
+                        <i class="zmdi zmdi-widgets" data-tab-active="true"></i>
+                        Todas
+                    </li>
+                    <li data-tab="favs">
+                        <i class="zmdi zmdi-star"></i>
+                        Interés
+                    </li>
+                    <li data-tab="tags">
+                        <i class="zmdi zmdi-tag-more"></i>
+                        Etiquetas
+                    </li>
+                </ul>
+            </div>
+
+            <div role="main" class="ui-content" data-inset="true">
+                <div id="allNewsTab" data-role="nd2tab" data-tab="allNews">
+                    <form class="ui-filterable">
+                        <input id="filterAllNews" data-type="search">
+                    </form>
+                    <ul id="newsAllList" data-role="listview" data-filter="true" data-input="#filterAllNews">
+                    </ul>
+                </div>
+            </div>
+
+            <div role="main" class="ui-content" data-inset="true">
+                <div id="favNewsTab" data-role="nd2tab" data-tab="favs">
+                    <form class="ui-filterable">
+                        <input id="filterFavNews" data-type="search">
+                    </form>
+                    <ul id="newsFavList" data-role="listview" data-filter="true" data-input="#filterFavNews">
+                    </ul>
+                </div>
+            </div>
+
+            <div role="main" class="ui-content" data-inset="true">
+                <div id="tagsTab" data-role="nd2tab" data-tab="tags">
+                    <form class="ui-filterable">
+                        <input id="filterTagsNews" data-type="search">
+                    </form>
+                    <ul id="tagList" data-role="listview" data-filter="true" data-input="#filterTagsNews">
+                    </ul>
+                </div>
+            </div>
+		</div>
+
+        <div data-role="page" id="settings">
+            <div data-role="header" data-position="fixed" class="wow slideInDown">
+                <h1 class="wow fadeIn" data-wow-delay='0.4s'>Ajustes</h1>
+                <a href="#allList" class="ui-btn ui-btn-left wow fadeIn" data-wow-delay="0.8s"><i class="zmdi zmdi-arrow-left"></i></a>
+            </div>
+			<div role="main" class="ui-content" data-inset="true">
+				<div class="card-action">
+					<div class="row between-xs">
+						<div class="col-xs-4">
+
+						</div>
+						<div class="col-xs-8 align-right">
+							<div class="box">
+								<a href="#" onclick="resetSettings();" class="ui-btn ui-btn-inline clr-btn-amber wow slideInRight">Restablecer</a>
+							</div>
+						</div>
+					</div>
+					<label for="slider">Cantidad de noticias a cargar:</label>
+					<input type="range" name="slider" id="slider" value="0" min="0" max="10" data-highlight="true">
+					<br/><br/>
+					<a href="#allList" onclick="saveSettings();" class="ui-btn clr-btn-green">Guardar Cambios</a>
+				</div>
+			</div>
+        </div>
+
+        <div data-role="page" id="viewer">
+            <div data-role="header" data-position="fixed" class="wow slideInDown">
+                <h1 class="wow fadeIn" data-wow-delay='0.4s'>Visor de noticia</h1>
+                <a href="#allList" class="ui-btn ui-btn-left wow fadeIn" data-wow-delay="0.8s"><i class="zmdi zmdi-arrow-left"></i></a>
+            </div>
+            <div id="dframe">
+
+            </div>
+        </div>
+
+        <script src="ui/js/jquery-2.2.4.min.js" type="text/javascript"></script>
+        <script src="ui/js/phoneready.jquery.js" type="text/javascript"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="ui/js/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
+        <script src="ui/js/jquery.cookie.js"></script>
+        <script src="ui/js/waves.min.js" type="text/javascript"></script>
+        <script src="ui/js/wow.min.js" type="text/javascript"></script>
+        <script src="ui/js/nativedroid2.js" type="text/javascript"></script>
+        <script src="ui/js/nd2settings.js" type="text/javascript"></script>
+        <script type="text/javascript">new WOW().init();</script>
+        <script src="cordova.js" type="text/javascript"></script>
+
+        <script src="ui/js/getnews.js" type="text/javascript"></script>
+        <script src="ui/js/listutils.js" type="text/javascript"></script>
+        <script src="ui/js/toast.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            var newsAllList;
+            var newsFavList;
+            var newsToLoad;
+            var fromNewsFav;
+            var fromNewsAll;
+            var favTags;
+            initVars();
+
+            $(document).ready(function() {
+                $("#refresh" ).click(RefreshLists);
+                // requestNewsList(fromNewsAll, newsToLoad);
+                // requestNewsList(fromNewsFav, newsToLoad, favTags);
+                // $.getJSON("http://colvin.chillan.ubiobio.cl:8070/crialvea/newsubb/groups.php", OnGroupsLoaded);
+            });
+
+            $.phoneReady(function() {
+            	requestNewsList(fromNewsAll, newsToLoad);
+                requestNewsList(fromNewsFav, newsToLoad, favTags);
+                $.getJSON("http://colvin.chillan.ubiobio.cl:8070/crialvea/newsubb/groups.php", OnGroupsLoaded);
+            });
+
+
+            function OnNewsClick(data) {
+                var itemId = $(data.currentTarget)[0].id;
+                var urlv;
+                for (var i = 0, len = newsAllList.length; i < len; i++) {
+                    if(newsAllList[i].id == itemId) {
+                        urlv = newsAllList[i].url;
+                    }
+                }
+                // console.log(urlv);
+                window.location.replace(urlv);
+            }
+
+            function LoadMoreNewsAll() {
+                $("#moreButtonAll" ).remove();
+                requestNewsList(fromNewsAll, newsToLoad);
+            }
+
+            function LoadMoreNewsFav() {
+                $("#moreButtonFav" ).remove();
+                requestNewsList(fromNewsFav, newsToLoad, favTags);
+            }
+
+            function RefreshLists() {
+                $('#newsAllList').children().remove('li');
+                $('#newsFavList').children().remove('li');
+                $('#tagList').children().remove('li');
+                $("#moreButtonAll" ).remove();
+                $("#moreButtonFav" ).remove();
+                newsAllList = [];
+                newsFavList = [];
+                fromNewsFav = 0;
+                fromNewsAll = 0;
+                requestNewsList(fromNewsAll, newsToLoad);
+                requestNewsList(fromNewsFav, newsToLoad, favTags);
+                $.getJSON("http://colvin.chillan.ubiobio.cl:8070/crialvea/newsubb/groups.php", OnGroupsLoaded);
+                toast("!Noticias actualizadas¡", 4000);
+            }
+
+            function saveSettings() {
+            	newsToLoad = $( "#slider").val();
+            	window.localStorage.setItem("newsToLoad", newsToLoad);
+            	toast("Ajustes guardados satisfactoriamente.", 3000);
+            }
+
+            function resetSettings() {
+            	$( "#slider").val( newsToLoad );
+            }
+
+            function OnGroupsLoaded(data, status) {
+                var groups = JSON.parse(JSON.stringify(data));
+                var icon, clr;
+
+                for (var i = 0, len = groups.length; i < len; i++) {
+                    //$("#tagList").append('<li id="' + i + '"><div align="center"><a href="#">' + groups[i] + '<div></a></li>' );
+                    if( favTags.indexOf(groups[i]) == -1 ) {
+                        icon = '<i class="zmdi zmdi-plus-square"></i>';
+                        clr = 'clr-bg-amber';
+                    }
+                    else {
+                        icon = '<i class="zmdi zmdi-minus-square"></i>';
+                        clr = 'clr-bg-light-green';
+                    }
+
+                    $("#tagList").append('<li class="' + clr + ' wow shake" data-wow-delay="0.4s" id="' + i + '"><a href="#"><div class="ui-grid-a"><div class="ui-block-a" align="left"></div></div><div align="left">' + icon + ' ' + groups[i] + '</div></a></li>').listview('refresh');
+
+                    $("#" + i ).click(OnTagClick);
+                }
+            }
+
+            function OnTagClick(data) {
+                var tag = $(data.currentTarget)[0].innerText;
+                // console.log(tag);
+                if( favTags.indexOf(tag.trim()) == -1 ) {
+                    favTags.push(tag.trim());
+                    toast( "¡Etiqueta agregada!", 4000);
+                } else {
+                    favTags.splice(favTags.indexOf(tag.trim()), 1);
+                    toast( "¡Etiqueta eliminada!", 4000);
+                }
+
+                window.localStorage.setItem("favTags", JSON.stringify(favTags));
+                // console.log(aux);
+                $('#newsFavList').children().remove('li');
+                $('#tagList').children().remove('li');
+                $("#moreButtonFav" ).remove();
+                requestNewsList(fromNewsFav, newsToLoad, favTags);
+                $.getJSON("http://colvin.chillan.ubiobio.cl:8070/crialvea/newsubb/groups.php", OnGroupsLoaded);
+            }
+
+            function OnReceiveList(news, mode) {
+                var auxArr;
+
+                switch(mode) {
+                    case "all":
+                        if(news.length < 1) {
+                            toast("¡No hay mas noticias en Todas!", 4000);
+                            addMore("newsAllList", "moreButtonAll");
+                            $("#moreButtonAll" ).click(LoadMoreNewsAll);
+                            return;
+                        }
+                        newsAllList = newsAllList.concat(news);
+
+                        for (var i = 0, len = news.length; i < len; i++) {
+
+                            addNews("newsAllList", news[i].id, news[i].thumbnail, news[i].tags, news[i].date, news[i].title, news[i].description);
+                            $("#" + news[i].id ).click(OnNewsClick);
+                        }
+                        fromNewsAll += newsToLoad;
+                        addMore("newsAllList", "moreButtonAll");
+                        $("#moreButtonAll" ).click(LoadMoreNewsAll);
+                        break;
+                    case "filter":
+                        if(favTags.length < 1) {
+                            toast("¡No tiene Tags para sección Interés!", 4000);
+                            addMore("newsFavList", "moreButtonFav");
+                            $("#moreButtonFav" ).click(LoadMoreNewsFav);
+                            return;
+                        }
+                        if(news.length < 1) {
+                            toast("¡No hay mas noticias en Interés!", 4000);
+                            addMore("newsFavList", "moreButtonFav");
+                            $("#moreButtonFav" ).click(LoadMoreNewsFav);
+                            return;
+                        }
+                        newsFavList = newsFavList.concat(news);
+
+                        for (var i = 0, len = news.length; i < len; i++) {
+                            addNews("newsFavList", news[i].id, news[i].thumbnail, news[i].tags, news[i].date, news[i].title, news[i].description);
+                            $("#" + news[i].id ).click(OnNewsClick);
+                        }
+                        fromNewsFav += newsToLoad;
+                        addMore("newsFavList", "moreButtonFav");
+                        $("#moreButtonFav" ).click(LoadMoreNewsFav);
+                        break;
+                }
+            }
+
+            function initVars() {
+                newsAllList = [];
+                newsFavList = [];
+                fromNewsFav = 0;
+                fromNewsAll = 0;
+                if(!window.localStorage.getItem("newsToLoad"))
+                    window.localStorage.setItem("newsToLoad", 2);
+                newsToLoad = parseInt(window.localStorage.getItem("newsToLoad"));
+                if(!window.localStorage.getItem("favTags"))
+                    window.localStorage.setItem("favTags", JSON.stringify([]));
+                favTags = JSON.parse(window.localStorage.getItem("favTags"));
+            }
+        </script>
+    </body>
+
+</html>

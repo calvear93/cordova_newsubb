@@ -1,0 +1,6 @@
+﻿tags: ici, android, informática
+title: Nueva asdasdadsa
+date: 2016-07-11
+description: Esta es la nueva aplicación para ver noticias ubb.
+thumbnail: caca3.jpg
+url: http://google.cl

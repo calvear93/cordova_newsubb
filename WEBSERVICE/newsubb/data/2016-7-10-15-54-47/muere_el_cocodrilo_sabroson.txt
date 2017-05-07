@@ -1,0 +1,6 @@
+tags: muerte,drama, sensualidad, drogas
+title: Muere el Cocodrilo Sabrosón
+date: 2016-07-11
+description: blabla
+thumbnail: los-cocodrilos-yo-se-que-te-gusta-2001.jpg
+url: https://es.wikipedia.org/wiki/Crocodylidae
